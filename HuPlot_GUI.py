@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*- 
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Apr 11 2011)
+## Python code generated with wxFormBuilder (version Oct  8 2012)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO "NOT" EDIT THIS FILE!
 ###########################################################################
 
 import wx
+import wx.xrc
 import wxMatplotlib
 import wx.grid
 
@@ -36,6 +37,7 @@ class HuPlot_GUI ( wx.Frame ):
 		self.phd_toolbar = wxMatplotlib.Toolbar( self.phd_fig.canvas )
 		bSizer12.Add( self.phd_toolbar, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.BOTTOM|wx.LEFT|wx.RIGHT, 5 )
 		
+		
 		bSizer11.Add( bSizer12, 3, wx.EXPAND, 5 )
 		
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
@@ -51,6 +53,7 @@ class HuPlot_GUI ( wx.Frame ):
 		self.phd_choice_legend_loc.SetMaxSize( wx.Size( 45,-1 ) )
 		
 		bSizer5.Add( self.phd_choice_legend_loc, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+		
 		
 		bSizer6.Add( bSizer5, 0, 0, 0 )
 		
@@ -102,7 +105,9 @@ class HuPlot_GUI ( wx.Frame ):
 		self.phd_grid.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
 		bSizer6.Add( self.phd_grid, 4, wx.ALL, 5 )
 		
+		
 		bSizer11.Add( bSizer6, 2, wx.EXPAND, 5 )
+		
 		
 		self.phd_panel.SetSizer( bSizer11 )
 		self.phd_panel.Layout()
@@ -119,6 +124,7 @@ class HuPlot_GUI ( wx.Frame ):
 		self.spe_toolbar = wxMatplotlib.Toolbar( self.spe_fig.canvas )
 		bSizer121.Add( self.spe_toolbar, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.BOTTOM|wx.LEFT|wx.RIGHT, 5 )
 		
+		
 		bSizer111.Add( bSizer121, 3, wx.EXPAND, 5 )
 		
 		bSizer61 = wx.BoxSizer( wx.VERTICAL )
@@ -134,6 +140,7 @@ class HuPlot_GUI ( wx.Frame ):
 		self.spe_choice_legend_loc.SetMaxSize( wx.Size( 45,-1 ) )
 		
 		bSizer51.Add( self.spe_choice_legend_loc, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+		
 		
 		bSizer61.Add( bSizer51, 0, 0, 0 )
 		
@@ -153,7 +160,7 @@ class HuPlot_GUI ( wx.Frame ):
 		self.spe_grid = wx.grid.Grid( self.spe_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 		
 		# Grid
-		self.spe_grid.CreateGrid( 0, 3 )
+		self.spe_grid.CreateGrid( 0, 4 )
 		self.spe_grid.EnableEditing( True )
 		self.spe_grid.EnableGridLines( True )
 		self.spe_grid.EnableDragGridSize( False )
@@ -176,7 +183,9 @@ class HuPlot_GUI ( wx.Frame ):
 		self.spe_grid.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
 		bSizer61.Add( self.spe_grid, 4, wx.ALL, 5 )
 		
+		
 		bSizer111.Add( bSizer61, 2, wx.EXPAND, 5 )
+		
 		
 		self.spe_panel.SetSizer( bSizer111 )
 		self.spe_panel.Layout()
@@ -184,6 +193,7 @@ class HuPlot_GUI ( wx.Frame ):
 		self.notebook.AddPage( self.spe_panel, u"SPE", True )
 		
 		bSizer10.Add( self.notebook, 1, wx.EXPAND |wx.ALL, 5 )
+		
 		
 		self.SetSizer( bSizer10 )
 		self.Layout()
@@ -341,6 +351,7 @@ class LifetimeFitFrame ( wx.Frame ):
 		self.phdfit_fname.Wrap( -1 )
 		bSizer12.Add( self.phdfit_fname, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 		
+		
 		bSizer7.Add( bSizer12, 0, wx.EXPAND, 5 )
 		
 		bSizer121 = wx.BoxSizer( wx.HORIZONTAL )
@@ -353,6 +364,7 @@ class LifetimeFitFrame ( wx.Frame ):
 		self.phdfit_directory.Wrap( -1 )
 		bSizer121.Add( self.phdfit_directory, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 		
+		
 		bSizer7.Add( bSizer121, 0, wx.EXPAND, 5 )
 		
 		bSizer8 = wx.BoxSizer( wx.HORIZONTAL )
@@ -362,6 +374,7 @@ class LifetimeFitFrame ( wx.Frame ):
 		bSizer8.Add( self.m_staticText1, 0, wx.ALIGN_CENTER|wx.BOTTOM|wx.LEFT|wx.TOP, 5 )
 		
 		self.phdfit_txtctrl_fitstart = wx.TextCtrl( self.m_panel2, wx.ID_ANY, u"0.0", wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
+		self.phdfit_txtctrl_fitstart.SetMaxLength( 0 ) 
 		bSizer8.Add( self.phdfit_txtctrl_fitstart, 0, wx.ALIGN_CENTER|wx.BOTTOM|wx.LEFT|wx.TOP, 5 )
 		
 		self.phdfit_spinbutton_fitstart = wx.SpinButton( self.m_panel2, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS|wx.SP_WRAP )
@@ -369,6 +382,7 @@ class LifetimeFitFrame ( wx.Frame ):
 		
 		self.phdfit_slider_fitstart = wx.Slider( self.m_panel2, wx.ID_ANY, 0, 0, 13600, wx.DefaultPosition, wx.Size( -1,-1 ), wx.SL_HORIZONTAL )
 		bSizer8.Add( self.phdfit_slider_fitstart, 1, wx.ALIGN_CENTER_VERTICAL|wx.ALL|wx.EXPAND, 5 )
+		
 		
 		bSizer7.Add( bSizer8, 1, wx.EXPAND, 5 )
 		
@@ -385,6 +399,7 @@ class LifetimeFitFrame ( wx.Frame ):
 		
 		
 		bSizer9.AddSpacer( ( 0, 0), 2, wx.EXPAND, 5 )
+		
 		
 		bSizer7.Add( bSizer9, 1, wx.EXPAND, 5 )
 		
@@ -431,12 +446,15 @@ class LifetimeFitFrame ( wx.Frame ):
 		self.phdfit_button_close = wx.Button( self.m_panel2, wx.ID_ANY, u"Close", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer10.Add( self.phdfit_button_close, 0, wx.ALL, 5 )
 		
+		
 		bSizer7.Add( bSizer10, 1, wx.EXPAND, 5 )
+		
 		
 		self.m_panel2.SetSizer( bSizer7 )
 		self.m_panel2.Layout()
 		bSizer7.Fit( self.m_panel2 )
 		bSizer6.Add( self.m_panel2, 1, wx.ALL|wx.EXPAND, 5 )
+		
 		
 		self.SetSizer( bSizer6 )
 		self.Layout()
@@ -509,6 +527,7 @@ class SPEFitFrame ( wx.Frame ):
 		self.spefit_fname.Wrap( -1 )
 		bSizer12.Add( self.spefit_fname, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 		
+		
 		bSizer7.Add( bSizer12, 0, wx.EXPAND, 5 )
 		
 		bSizer121 = wx.BoxSizer( wx.HORIZONTAL )
@@ -521,6 +540,7 @@ class SPEFitFrame ( wx.Frame ):
 		self.spefit_directory.Wrap( -1 )
 		bSizer121.Add( self.spefit_directory, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 		
+		
 		bSizer7.Add( bSizer121, 0, wx.EXPAND, 5 )
 		
 		bSizer8 = wx.BoxSizer( wx.HORIZONTAL )
@@ -530,6 +550,7 @@ class SPEFitFrame ( wx.Frame ):
 		bSizer8.Add( self.m_staticText1, 0, wx.ALIGN_CENTER|wx.BOTTOM|wx.LEFT|wx.TOP, 5 )
 		
 		self.spefit_txtctrl_fitstart = wx.TextCtrl( self.panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spefit_txtctrl_fitstart.SetMaxLength( 0 ) 
 		bSizer8.Add( self.spefit_txtctrl_fitstart, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
 		self.m_staticText24 = wx.StaticText( self.panel, wx.ID_ANY, u"to", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -537,7 +558,9 @@ class SPEFitFrame ( wx.Frame ):
 		bSizer8.Add( self.m_staticText24, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
 		self.spefit_txtctrl_fitend = wx.TextCtrl( self.panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.spefit_txtctrl_fitend.SetMaxLength( 0 ) 
 		bSizer8.Add( self.spefit_txtctrl_fitend, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		
 		
 		bSizer7.Add( bSizer8, 1, wx.EXPAND, 5 )
 		
@@ -555,6 +578,7 @@ class SPEFitFrame ( wx.Frame ):
 		
 		bSizer9.AddSpacer( ( 0, 0), 2, wx.EXPAND, 5 )
 		
+		
 		bSizer7.Add( bSizer9, 1, wx.EXPAND, 5 )
 		
 		bSizer34 = wx.BoxSizer( wx.HORIZONTAL )
@@ -571,6 +595,7 @@ class SPEFitFrame ( wx.Frame ):
 		self.spefit_combo_numberpoints_level.SetMaxSize( wx.Size( 75,-1 ) )
 		
 		bSizer34.Add( self.spefit_combo_numberpoints_level, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		
 		
 		bSizer7.Add( bSizer34, 1, wx.EXPAND, 5 )
 		
@@ -618,12 +643,15 @@ class SPEFitFrame ( wx.Frame ):
 		self.spefit_button_close = wx.Button( self.panel, wx.ID_ANY, u"Close", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer10.Add( self.spefit_button_close, 0, wx.ALL, 5 )
 		
+		
 		bSizer7.Add( bSizer10, 1, wx.EXPAND, 5 )
+		
 		
 		self.panel.SetSizer( bSizer7 )
 		self.panel.Layout()
 		bSizer7.Fit( self.panel )
 		bSizer6.Add( self.panel, 1, wx.ALL|wx.EXPAND, 5 )
+		
 		
 		self.SetSizer( bSizer6 )
 		self.Layout()
@@ -689,12 +717,15 @@ class SPEFit_SliderFrame ( wx.Frame ):
 		self.spefit_popup_button_cancel = wx.Button( self.m_panel5, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizer28.Add( self.spefit_popup_button_cancel, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
+		
 		bSizer26.Add( bSizer28, 1, wx.EXPAND, 5 )
+		
 		
 		self.m_panel5.SetSizer( bSizer26 )
 		self.m_panel5.Layout()
 		bSizer26.Fit( self.m_panel5 )
 		bSizer25.Add( self.m_panel5, 1, wx.EXPAND |wx.ALL, 5 )
+		
 		
 		self.SetSizer( bSizer25 )
 		self.Layout()

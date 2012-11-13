@@ -86,14 +86,17 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
         self.phd_autoscale_on_drop = True
         
         self.spe_color_column = 0
-        self.spe_label_column = 2
+        self.spe_label_column = 3
         self.spe_bg_column = 1
+        self.spe_offset_column = 2
         self.spe_grid.SetColLabelValue( self.spe_color_column, '' )
         self.spe_grid.SetColSize( self.spe_color_column, 30 )
         self.spe_grid.SetColLabelValue( self.spe_label_column, 'Label' )
         self.spe_grid.SetColSize( self.spe_label_column, 250 )
         self.spe_grid.SetColLabelValue( self.spe_bg_column, 'BG' )
         self.spe_grid.SetColSize( self.spe_bg_column, 30 )
+        self.spe_grid.SetColLabelValue( self.spe_offset_column, 'yoffset')
+        self.spe_grid.SetColSize( self.spe_offset_column, 50 )
         self.spe_grid.SetDefaultCellOverflow( False )
 
         self.spe_line_list = []
@@ -483,15 +486,7 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
             self.on_checked_spe_legend( event=None )
             
         elif col == self.spe_offset_column:
-            if self.spe_offset_all:
-                offset = float( self.spe_grid.GetCellValue( row, self.spe_offset_column ) )
-                self.spe_offset = offset
-                self.spe_offset_slider.Value = 1000*offset
-                for line in self.spe_line_list:
-                    line['offset'] = offset
-                    self.spe_grid.SetCellValue( line['row'], self.spe_offset_column, str(offset) )
-            else:
-                self.spe_line_list[row]['offset'] = self.spe_grid.GetCellValue( row, self.spe_offset_column )
+            self.spe_line_list[row]['offset'] = self.spe_grid.GetCellValue( row, self.spe_offset_column )
             self.spe_update_plot()
     
 
@@ -538,10 +533,10 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
             color = self.get_color( row )
             if color is not None: self.spe_set_color( row, color )
 
-        elif col == self.phd_label_column:
+        elif col == self.spe_label_column:
             self.spe_grid.SetGridCursor( row, col )
 
-        elif col == self.phd_offset_column:
+        elif col == self.spe_offset_column:
             self.spe_grid.SetGridCursor( row, col )
 
     
@@ -844,7 +839,8 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
                 spectrum.plot( color=[c/255.0 for c in line['color']],
                     label=line['label'],
                     semilogy=self.spe_semilog,
-                    connect_on_close=False )
+                    connect_on_close=False,
+                    yoffset = float(line['offset']) )
             
             self.spe_fig.axes.set_xlabel( 'Wavelength (nm)' )
             self.spe_fig.axes.set_ylabel( 'Intensity (arb. units)' )
@@ -911,6 +907,8 @@ class FileDropTarget(wx.FileDropTarget):
             new_row = self.parent.spe_grid.GetNumberRows()-1
             label = os.path.splitext( os.path.basename( fname ) )[0]
             self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_label_column, label )
+            offset=0.0
+            self.parent.spe_grid.SetCellValue ( new_row, self.parent.spe_offset_column, str(offset) )
             s = winspec.Spectrum( fname )
             if s.background_corrected:
                 self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_bg_column, 'y' )
@@ -931,7 +929,9 @@ class FileDropTarget(wx.FileDropTarget):
                       color=self.color_list[ pylab.mod(new_row, len(self.color_list)) ],
                       label=label,
                       bg_row=bg_row,
-                      spectrum=s ) )
+                      spectrum=s,
+                      offset=0.0) )
+            
             self.parent.spe_grid.SetCellBackgroundColour( new_row, self.parent.spe_color_column, 
                         self.color_list[ pylab.mod(new_row, len(self.color_list)) ] )
     
