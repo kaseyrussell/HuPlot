@@ -945,7 +945,8 @@ class FileDropTarget(wx.FileDropTarget):
     def OnDropFiles(self, x, y, filenames):
         """ Drop Event handler. """
         phdfiles = [ fname for fname in filenames if ".phd" in fname ]
-        spefiles = [ fname for fname in filenames if ".SPE" in fname ]
+        #spefiles = [ fname for fname in filenames if ".SPE" in fname ]
+        spefiles = [ fname for fname in filenames if ".SPE" in fname or ".txt" in fname ]
         if len(spefiles) > 0: self.add_spe_files( spefiles )
         if len(phdfiles) > 0: self.add_phd_files( phdfiles )
 
