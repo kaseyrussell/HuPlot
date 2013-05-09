@@ -21,7 +21,7 @@ class HuPlot_GUI ( wx.Frame ):
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"HuPlot", pos = wx.DefaultPosition, size = wx.Size( 1000,600 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
-		self.SetSizeHintsSz( wx.Size( 900,500 ), wx.DefaultSize )
+		self.SetSizeHintsSz( wx.Size( 1000,500 ), wx.DefaultSize )
 		
 		bSizer10 = wx.BoxSizer( wx.VERTICAL )
 		
@@ -142,31 +142,54 @@ class HuPlot_GUI ( wx.Frame ):
 		bSizer51.Add( self.spe_choice_legend_loc, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 		
 		
-		bSizer61.Add( bSizer51, 0, 0, 0 )
+		bSizer51.AddSpacer( ( 0, 0), 2, wx.EXPAND, 5 )
 		
-		self.spe_checkbox_normalize = wx.CheckBox( self.spe_panel, wx.ID_ANY, u"Normalize", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer61.Add( self.spe_checkbox_normalize, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5 )
+		self.spe_checkbox_normalize = wx.CheckBox( self.spe_panel, wx.ID_ANY, u"Normalize", wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT )
+		bSizer51.Add( self.spe_checkbox_normalize, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT, 0 )
+		
+		
+		bSizer61.Add( bSizer51, 0, wx.EXPAND, 0 )
+		
+		bSizer28 = wx.BoxSizer( wx.HORIZONTAL )
 		
 		self.spe_checkbox_countspersecond = wx.CheckBox( self.spe_panel, wx.ID_ANY, u"Counts per second", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer61.Add( self.spe_checkbox_countspersecond, 0, wx.ALL, 5 )
+		bSizer28.Add( self.spe_checkbox_countspersecond, 0, wx.ALL, 5 )
 		
-		self.spe_checkbox_semilog = wx.CheckBox( self.spe_panel, wx.ID_ANY, u"Semilog", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer61.Add( self.spe_checkbox_semilog, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5 )
+		
+		bSizer28.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+		
+		self.spe_checkbox_semilog = wx.CheckBox( self.spe_panel, wx.ID_ANY, u"Semilog", wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT )
+		bSizer28.Add( self.spe_checkbox_semilog, 0, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+		
+		
+		bSizer61.Add( bSizer28, 0, wx.EXPAND, 0 )
+		
+		bSizer29 = wx.BoxSizer( wx.HORIZONTAL )
 		
 		self.spe_checkbox_autoscale_on_drop = wx.CheckBox( self.spe_panel, wx.ID_ANY, u"Autoscale on drop", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.spe_checkbox_autoscale_on_drop.SetValue(True) 
-		bSizer61.Add( self.spe_checkbox_autoscale_on_drop, 0, wx.LEFT, 5 )
+		bSizer29.Add( self.spe_checkbox_autoscale_on_drop, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5 )
+		
+		
+		bSizer29.AddSpacer( ( 0, 0), 1, wx.EXPAND, 5 )
+		
+		self.spe_checkbox_raman = wx.CheckBox( self.spe_panel, wx.ID_ANY, u"Raman", wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT )
+		bSizer29.Add( self.spe_checkbox_raman, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+		
+		
+		bSizer61.Add( bSizer29, 0, wx.EXPAND, 0 )
 		
 		self.spe_grid = wx.grid.Grid( self.spe_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 		
 		# Grid
-		self.spe_grid.CreateGrid( 0, 4 )
+		self.spe_grid.CreateGrid( 0, 5 )
 		self.spe_grid.EnableEditing( True )
 		self.spe_grid.EnableGridLines( True )
-		self.spe_grid.EnableDragGridSize( False )
+		self.spe_grid.EnableDragGridSize( True )
 		self.spe_grid.SetMargins( 0, 0 )
 		
 		# Columns
+		self.spe_grid.AutoSizeColumns()
 		self.spe_grid.EnableDragColMove( False )
 		self.spe_grid.EnableDragColSize( True )
 		self.spe_grid.SetColLabelSize( 30 )
@@ -181,7 +204,7 @@ class HuPlot_GUI ( wx.Frame ):
 		
 		# Cell Defaults
 		self.spe_grid.SetDefaultCellAlignment( wx.ALIGN_LEFT, wx.ALIGN_TOP )
-		bSizer61.Add( self.spe_grid, 4, wx.ALL, 5 )
+		bSizer61.Add( self.spe_grid, 2, wx.ALL|wx.EXPAND, 5 )
 		
 		
 		bSizer111.Add( bSizer61, 2, wx.EXPAND, 5 )
@@ -233,6 +256,7 @@ class HuPlot_GUI ( wx.Frame ):
 		self.spe_checkbox_countspersecond.Bind( wx.EVT_CHECKBOX, self.on_checked_spe_countspersecond )
 		self.spe_checkbox_semilog.Bind( wx.EVT_CHECKBOX, self.on_checked_spe_semilog )
 		self.spe_checkbox_autoscale_on_drop.Bind( wx.EVT_CHECKBOX, self.on_checked_spe_autoscale_on_drop )
+		self.spe_checkbox_raman.Bind( wx.EVT_CHECKBOX, self.on_checked_spe_raman )
 		self.spe_grid.Bind( wx.grid.EVT_GRID_CELL_CHANGE, self.on_spe_grid_edit )
 		self.spe_grid.Bind( wx.grid.EVT_GRID_CELL_LEFT_CLICK, self.on_spe_grid_leftclick )
 		self.spe_grid.Bind( wx.grid.EVT_GRID_CELL_RIGHT_CLICK, self.on_spe_grid_rightclick )
@@ -301,6 +325,9 @@ class HuPlot_GUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_checked_spe_autoscale_on_drop( self, event ):
+		event.Skip()
+	
+	def on_checked_spe_raman( self, event ):
 		event.Skip()
 	
 	def on_spe_grid_edit( self, event ):

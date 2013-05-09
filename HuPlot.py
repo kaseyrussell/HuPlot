@@ -86,23 +86,28 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
         self.phd_autoscale_on_drop = True
         
         self.spe_color_column = 0
-        self.spe_label_column = 3
+        self.spe_label_column = 4
         self.spe_bg_column = 1
         self.spe_offset_column = 2
+        self.spe_laser_column = 3
         self.spe_grid.SetColLabelValue( self.spe_color_column, '' )
         self.spe_grid.SetColSize( self.spe_color_column, 30 )
         self.spe_grid.SetColLabelValue( self.spe_label_column, 'Label' )
         self.spe_grid.SetColSize( self.spe_label_column, 250 )
-        self.spe_grid.SetColLabelValue( self.spe_bg_column, 'BG' )
+        self.spe_grid.SetColLabelValue( self.spe_bg_column, 'bg' )
         self.spe_grid.SetColSize( self.spe_bg_column, 30 )
-        self.spe_grid.SetColLabelValue( self.spe_offset_column, 'yoffset')
-        self.spe_grid.SetColSize( self.spe_offset_column, 50 )
+        self.spe_grid.SetColLabelValue( self.spe_offset_column, '+y')
+        self.spe_grid.SetColSize( self.spe_offset_column, 30 )
+        self.spe_grid.SetColLabelValue( self.spe_laser_column, 'laser')
+        self.spe_grid.SetColSize( self.spe_laser_column, 40 )
         self.spe_grid.SetDefaultCellOverflow( False )
 
         self.spe_line_list = []
         self.spe_bg_list = []
         self.spe_normalize = self.spe_checkbox_normalize.IsChecked()
+        self.spe_countspersecond = self.spe_checkbox_countspersecond.IsChecked()
         self.spe_semilog = self.spe_checkbox_semilog.IsChecked()
+        self.spe_raman = self.spe_checkbox_raman.IsChecked()
         self.spe_autoscale_on_drop = True
 
         self.color_data = wx.ColourData()
@@ -255,6 +260,21 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
             self.phd_update_plot()
     
 
+    def on_checked_spe_countspersecond( self, event ):
+        if self.spe_checkbox_countspersecond.IsChecked():
+            if self.spe_checkbox_normalize.IsChecked():
+                self.spe_checkbox_normalize.SetValue(False)
+                self.on_checked_spe_normalize(None)
+            self.spe_countspersecond = True
+            self.spe_update_plot()
+        else:
+            self.spe_countspersecond = False
+            for line in self.spe_line_list:
+                spectrum = line['spectrum']
+                spectrum.reset_lum()
+            if event is not None: self.spe_update_plot()
+    
+
     def on_checked_phd_legend( self, event ):
         """ Event handler. """
         if self.phd_checkbox_legend.IsChecked():
@@ -327,6 +347,9 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
     def on_checked_spe_normalize( self, event ):
         """ Event handler. """
         if self.spe_checkbox_normalize.IsChecked():
+            if self.spe_checkbox_countspersecond.IsChecked():
+                self.spe_checkbox_countspersecond.SetValue(False)
+                self.on_checked_spe_countspersecond(None)
             self.spe_normalize = True
             self.spe_update_plot()
         else:
@@ -334,7 +357,17 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
             for line in self.spe_line_list:
                 spectrum = line['spectrum']
                 spectrum.reset_lum()
+            if event is not None: self.spe_update_plot()
+
+    
+    def on_checked_spe_raman( self, event ):
+        """ Event handler. """
+        if self.spe_checkbox_raman.IsChecked():
+            self.spe_raman = True
             self.spe_update_plot()
+        else:
+            self.spe_raman = False
+            if event is not None: self.spe_update_plot()
 
     
     def on_checked_phd_offset_all_same( self, event ):
@@ -489,6 +522,10 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
             self.spe_line_list[row]['offset'] = self.spe_grid.GetCellValue( row, self.spe_offset_column )
             self.spe_update_plot()
     
+        elif col == self.spe_laser_column:
+            self.spe_line_list[row]['spectrum'].laser = float(self.spe_grid.GetCellValue( row, self.spe_laser_column ))
+            self.spe_update_plot()
+    
 
     def on_phd_grid_leftclick( self, event ):
         """ Event handler. """
@@ -537,6 +574,9 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
             self.spe_grid.SetGridCursor( row, col )
 
         elif col == self.spe_offset_column:
+            self.spe_grid.SetGridCursor( row, col )
+
+        elif col == self.spe_laser_column:
             self.spe_grid.SetGridCursor( row, col )
 
     
@@ -822,9 +862,11 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
                 line = self.spe_line_list[-(i+1)]
                 spectrum = line['spectrum']
                 if self.spe_normalize: spectrum.normalize()
+                if self.spe_countspersecond: spectrum.counts_per_second()
                 spectrum.plot( color=[c/255.0 for c in line['color']],
                     label=line['label'],
-                    semilogy=self.spe_semilog )
+                    semilogy=self.spe_semilog,
+                    as_raman=self.spe_raman )
         else:
             self.spe_fig.axes.cla()
             self.spe_fig.axes.set_autoscale_on( True )
@@ -835,14 +877,21 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
                     spectrum.background_correct( self.spe_bg_list[line['bg_row']] )
                     
                 if self.spe_normalize: spectrum.normalize()
+                if self.spe_countspersecond: spectrum.counts_per_second()
+                if self.spe_raman and (spectrum.laser in [None, 0.0]):
+                    continue
 
                 spectrum.plot( color=[c/255.0 for c in line['color']],
                     label=line['label'],
                     semilogy=self.spe_semilog,
+                    as_raman=self.spe_raman,
                     connect_on_close=False,
                     yoffset = float(line['offset']) )
             
-            self.spe_fig.axes.set_xlabel( 'Wavelength (nm)' )
+            if self.spe_raman:
+                self.spe_fig.axes.set_xlabel( 'Wavenumbers (cm$^{-1}$)' )
+            else:
+                self.spe_fig.axes.set_xlabel( 'Wavelength (nm)' )
             self.spe_fig.axes.set_ylabel( 'Intensity (arb. units)' )
         
         if self.spe_checkbox_legend.IsChecked():
@@ -905,11 +954,18 @@ class FileDropTarget(wx.FileDropTarget):
         for fname in filenames:
             self.parent.spe_grid.AppendRows(1)
             new_row = self.parent.spe_grid.GetNumberRows()-1
-            label = os.path.splitext( os.path.basename( fname ) )[0]
+            label   = os.path.splitext( os.path.basename( fname ) )[0]
+            offset  = 0.0
+            s       = winspec.Spectrum( fname )
+            if new_row == 0:
+                s.laser = None
+            else:
+                s.laser = float(self.parent.spe_grid.GetCellValue( new_row-1, self.parent.spe_laser_column ))
             self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_label_column, label )
-            offset=0.0
-            self.parent.spe_grid.SetCellValue ( new_row, self.parent.spe_offset_column, str(offset) )
-            s = winspec.Spectrum( fname )
+            self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_offset_column, str(offset) )
+            if s.laser is not None:
+                self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_laser_column, "{0:.1f}".format(s.laser) )
+
             if s.background_corrected:
                 self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_bg_column, 'y' )
                 bg_row = None
@@ -920,6 +976,8 @@ class FileDropTarget(wx.FileDropTarget):
             else:
                 self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_bg_column, 'n' )
                 bg_row = None
+
+                
                 
             s.set_axes( axes=self.parent.spe_fig.axes )
             self.parent.spe_grid.SetReadOnly( new_row, self.parent.spe_bg_column )
