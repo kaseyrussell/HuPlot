@@ -957,13 +957,15 @@ class FileDropTarget(wx.FileDropTarget):
             label   = os.path.splitext( os.path.basename( fname ) )[0]
             offset  = 0.0
             s       = winspec.Spectrum( fname )
-            if new_row == 0:
+            if new_row == 0 or self.parent.spe_grid.GetCellValue( new_row-1, self.parent.spe_laser_column ) == "":
                 s.laser = None
             else:
                 s.laser = float(self.parent.spe_grid.GetCellValue( new_row-1, self.parent.spe_laser_column ))
             self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_label_column, label )
             self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_offset_column, str(offset) )
-            if s.laser is not None:
+            if s.laser is None:
+                self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_laser_column, "" )
+            else:
                 self.parent.spe_grid.SetCellValue( new_row, self.parent.spe_laser_column, "{0:.1f}".format(s.laser) )
 
             if s.background_corrected:
