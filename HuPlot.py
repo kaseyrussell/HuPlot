@@ -776,6 +776,25 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
             self.on_menu_edit_clear_spe_plot(None)
             
             
+    def on_spe_txtctrl_offset_changed( self, event ):
+        """ Event handler. """
+        try:
+            self.spe_offset = float( self.spe_txtctrl_offset.GetValue() )
+        except ValueError:
+            return True
+
+        if self.spe_checkbox_offset.IsChecked():
+            """ don't alter values unless checkbox is checked. """
+            self.on_checked_spe_offset(None)
+
+
+    def on_checked_spe_offset( self, event ):
+        """ Event handler. """
+        for i,line in enumerate(self.spe_line_list):
+            line['offset'] = 0.0 if not self.spe_checkbox_offset.IsChecked() else i*self.spe_offset
+        self.spe_update_plot()        
+
+
     def phd_clear_bestfit_lines( self ):
         """
         If you normalize the plot, etc., then obviously you will need
@@ -866,7 +885,8 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
                 spectrum.plot( color=[c/255.0 for c in line['color']],
                     label=line['label'],
                     semilogy=self.spe_semilog,
-                    as_raman=self.spe_raman )
+                    as_raman=self.spe_raman,
+                    yoffset = float(line['offset']) )
         else:
             self.spe_fig.axes.cla()
             self.spe_fig.axes.set_autoscale_on( True )
@@ -955,7 +975,7 @@ class FileDropTarget(wx.FileDropTarget):
             self.parent.spe_grid.AppendRows(1)
             new_row = self.parent.spe_grid.GetNumberRows()-1
             label   = os.path.splitext( os.path.basename( fname ) )[0]
-            offset  = 0.0
+            offset  = 0.0 if not self.parent.spe_checkbox_offset.IsChecked() else new_row*self.parent.spe_offset
             s       = winspec.Spectrum( fname )
             if new_row == 0 or self.parent.spe_grid.GetCellValue( new_row-1, self.parent.spe_laser_column ) == "":
                 s.laser = None

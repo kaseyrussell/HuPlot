@@ -179,6 +179,17 @@ class HuPlot_GUI ( wx.Frame ):
 		
 		bSizer61.Add( bSizer29, 0, wx.EXPAND, 0 )
 		
+		bSizer30 = wx.BoxSizer( wx.HORIZONTAL )
+		
+		self.spe_checkbox_offset = wx.CheckBox( self.spe_panel, wx.ID_ANY, u"Offset", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer30.Add( self.spe_checkbox_offset, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5 )
+		
+		self.spe_txtctrl_offset = wx.TextCtrl( self.spe_panel, wx.ID_ANY, u"0.0", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer30.Add( self.spe_txtctrl_offset, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5 )
+		
+		
+		bSizer61.Add( bSizer30, 0, wx.EXPAND, 5 )
+		
 		self.spe_grid = wx.grid.Grid( self.spe_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
 		
 		# Grid
@@ -257,6 +268,8 @@ class HuPlot_GUI ( wx.Frame ):
 		self.spe_checkbox_semilog.Bind( wx.EVT_CHECKBOX, self.on_checked_spe_semilog )
 		self.spe_checkbox_autoscale_on_drop.Bind( wx.EVT_CHECKBOX, self.on_checked_spe_autoscale_on_drop )
 		self.spe_checkbox_raman.Bind( wx.EVT_CHECKBOX, self.on_checked_spe_raman )
+		self.spe_checkbox_offset.Bind( wx.EVT_CHECKBOX, self.on_checked_spe_offset )
+		self.spe_txtctrl_offset.Bind( wx.EVT_TEXT, self.on_spe_txtctrl_offset_changed )
 		self.spe_grid.Bind( wx.grid.EVT_GRID_CELL_CHANGE, self.on_spe_grid_edit )
 		self.spe_grid.Bind( wx.grid.EVT_GRID_CELL_LEFT_CLICK, self.on_spe_grid_leftclick )
 		self.spe_grid.Bind( wx.grid.EVT_GRID_CELL_RIGHT_CLICK, self.on_spe_grid_rightclick )
@@ -328,6 +341,12 @@ class HuPlot_GUI ( wx.Frame ):
 		event.Skip()
 	
 	def on_checked_spe_raman( self, event ):
+		event.Skip()
+	
+	def on_checked_spe_offset( self, event ):
+		event.Skip()
+	
+	def on_spe_txtctrl_offset_changed( self, event ):
 		event.Skip()
 	
 	def on_spe_grid_edit( self, event ):
