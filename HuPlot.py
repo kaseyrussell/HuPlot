@@ -102,13 +102,14 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
         self.spe_grid.SetColSize( self.spe_laser_column, 40 )
         self.spe_grid.SetDefaultCellOverflow( False )
 
-        self.spe_line_list = []
-        self.spe_bg_list = []
-        self.spe_normalize = self.spe_checkbox_normalize.IsChecked()
-        self.spe_countspersecond = self.spe_checkbox_countspersecond.IsChecked()
-        self.spe_semilog = self.spe_checkbox_semilog.IsChecked()
-        self.spe_raman = self.spe_checkbox_raman.IsChecked()
+        self.spe_line_list         = []
+        self.spe_bg_list           = []
+        self.spe_normalize         = self.spe_checkbox_normalize.IsChecked()
+        self.spe_countspersecond   = self.spe_checkbox_countspersecond.IsChecked()
+        self.spe_semilog           = self.spe_checkbox_semilog.IsChecked()
+        self.spe_raman             = self.spe_checkbox_raman.IsChecked()
         self.spe_autoscale_on_drop = True
+        self.spe_offset            = 0.0
 
         self.color_data = wx.ColourData()
         self.default_path = None
@@ -185,7 +186,7 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
         """Delete multiple data files at once."""
         dlg = messageDialog(self, message='Delete selected rows?', title='Alert!')
         if not dlg.accepted: return None
-        for row in reversed(self.spe_grid.GetSelectedRows()):
+        for row in reversed(sorted(self.spe_grid.GetSelectedRows())):
             self.current_row = row
             self.spe_delete_row( event=None )
         self.spe_update_plot()
@@ -791,7 +792,10 @@ class HuPlot( HuPlot_GUI.HuPlot_GUI ):
     def on_checked_spe_offset( self, event ):
         """ Event handler. """
         for i,line in enumerate(self.spe_line_list):
-            line['offset'] = 0.0 if not self.spe_checkbox_offset.IsChecked() else i*self.spe_offset
+            offset = 0.0 if not self.spe_checkbox_offset.IsChecked() else i*self.spe_offset
+            line['offset'] = offset
+            self.spe_grid.SetCellValue( i, self.spe_offset_column, str(offset) )
+
         self.spe_update_plot()        
 
 
@@ -1010,7 +1014,7 @@ class FileDropTarget(wx.FileDropTarget):
                       label=label,
                       bg_row=bg_row,
                       spectrum=s,
-                      offset=0.0) )
+                      offset=offset) )
             
             self.parent.spe_grid.SetCellBackgroundColour( new_row, self.parent.spe_color_column, 
                         self.color_list[ pylab.mod(new_row, len(self.color_list)) ] )
