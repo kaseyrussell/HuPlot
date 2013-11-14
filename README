@@ -1,9 +1,0 @@
-HuPlot
-
-A graphical program for plotting florescence spectra (SPE files) and lifetime traces (PHD files).
-
-Note: This package depends on a few modules from another of my hosted packages (kaseyrussell/python_misc_modules). 
-Get them here: https://github.com/kaseyrussell/python_misc_modules
-
-Copyright 2012-2013 Kasey J. Russell
-
